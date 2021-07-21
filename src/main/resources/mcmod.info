@@ -1,0 +1,19 @@
+[
+  {
+    "modid": "mk",
+    "name": "jw",
+    "description": "",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "MK",
+      "Afhistos"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
