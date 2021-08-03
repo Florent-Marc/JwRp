@@ -25,8 +25,8 @@ public class Rg {
     public static void removeregion(String name){
         String reg = name;
         //send to serveur
-    }
 
+    }
     public static HashMap<String, String> Rglist = new HashMap<String, String>();
     public static HashMap<String,String> getRglist() {
         Rglist.put("Diamant", "-1:0:0:-10:0:0");
