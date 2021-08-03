@@ -1,21 +1,28 @@
 package com.mk.jw.listener;
 
 import com.mk.jw.Utils.Utils;
-import com.mk.jw.gui.GuiDownload;
-import com.mk.jw.gui.GuiPause;
+import com.mk.jw.gui.GuiStats;
+import com.mk.jw.gui.GuiTryDisconnect;
+import com.mk.jw.gui.Scientifique;
+import com.mk.jw.gui.Securiter;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiDownloadTerrain;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -30,7 +37,11 @@ public class Client {
     @SubscribeEvent
     public void GuieventHandler(GuiOpenEvent e) {
         if(e.getGui() instanceof GuiMainMenu){
-           //e.setGui(new GuiPause());
+            Minecraft.getMinecraft().gameSettings.loadOptions();
+            Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MUSIC,0.0F);
+            Minecraft.getMinecraft().gameSettings.saveOptions();
+            //Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundManager.menu, 1.0F, 0.3F));
+           //e.setGui(new com.mk.jw.gui.GuiMainMenu());
         }
         if(e.getGui() instanceof GuiDisconnected){
             //e.setGui(new com.mk.jw.gui.GuiMainMenuFailed());
@@ -38,8 +49,34 @@ public class Client {
         }
         if(e.getGui() instanceof GuiDownloadTerrain){
             //e.setGui(new GuiDownload());
+            Utils.gui=true;
         }
-        Log.error(e.getGui());
+        if(e.getGui() == null ){
+            if(Utils.gui) {
+                e.setGui(new GuiStats());
+            }
+        }
+        if(e.getGui() instanceof GuiIngameMenu){
+            e.setGui(new GuiTryDisconnect());
+        }
+        //Log.error(e.getGui());
+    }
+    @SubscribeEvent
+    public void block(PlayerInteractEvent.RightClickBlock e){
+        if(e.getItemStack().getItem()== Item.getItemById(50)){
+        }
+
+    }
+    @SubscribeEvent
+    public void InteractWithEntity(PlayerInteractEvent.EntityInteract e){
+        EntityPlayer p = e.getEntityPlayer();
+
+        if(e.getTarget().getName().equals("Securiter")){
+            Minecraft.getMinecraft().displayGuiScreen(new Securiter());
+        }
+        if(e.getTarget().getName().equals("Scientifique")){
+            Minecraft.getMinecraft().displayGuiScreen(new Scientifique());
+        }
     }
 
     @SubscribeEvent
@@ -77,7 +114,6 @@ public class Client {
     public void renderGameOverlay(RenderGameOverlayEvent.Post e) {
         int w = e.getResolution().getScaledWidth();
         int h = e.getResolution().getScaledHeight();
-        drawEntityOnScreen( w/18,h+((h/4)/2),h/6,Minecraft.getMinecraft().mouseHelper.deltaX,Minecraft.getMinecraft().mouseHelper.deltaY,Minecraft.getMinecraft().player);
         if(!Minecraft.getMinecraft().player.isCreative()) {
             GlStateManager.pushMatrix();
             GL11.glScaled(0.7F, 0.7F, 0.7F);
@@ -89,43 +125,5 @@ public class Client {
             GlStateManager.popMatrix();
         }
     }
-    public static void drawEntityOnScreen(int posX, int posY, int scale, float mouseX, float mouseY,
-                                          EntityLivingBase ent) {
 
-        GlStateManager.enableColorMaterial();
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float) posX, (float) posY, -50F);
-        GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
-        GlStateManager.rotate((float) (180.0F), (float) 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotate((float) (25.0F), (float) 0.0F, 1.0F, 0.0F);
-
-        float f = ent.renderYawOffset;
-        float f1 = ent.rotationYaw;
-        float f2 = ent.rotationPitch;
-        float f3 = ent.prevRotationYawHead;
-        float f4 = ent.rotationYawHead;
-        RenderHelper.enableStandardItemLighting();
-        ent.renderYawOffset = 0;
-        ent.rotationYawHead = 0;
-        ent.rotationPitch = 0;
-        GlStateManager.translate(0.0F, 0.0F, 0.0F);
-        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
-        rendermanager.setPlayerViewY(180.0F);
-        rendermanager.setRenderShadow(false);
-
-        rendermanager.renderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-        rendermanager.setRenderShadow(true);
-
-        GlStateManager.popMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GlStateManager.disableTexture2D();
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-        ent.renderYawOffset = f;
-        ent.rotationYaw = f1;
-        ent.rotationPitch = f2;
-        ent.prevRotationYawHead = f3;
-        ent.rotationYawHead = f4;
-    }
 }
