@@ -1,25 +1,22 @@
-package com.mk.jw.blocks;
+package com.mk.jw.items;
 
 
 import com.mk.jw.jw;
 import fr.dynamx.common.items.DynamXItem;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 import java.util.List;
 
 
-public class bidon extends DynamXItem {
+public class ItemBidon extends DynamXItem {
 
     public static final String STATE_FUEL = "FUEL";
 
-    public bidon(String modid, String itemName, String model) {
+    public ItemBidon(String modid, String itemName, String model) {
         super(modid, itemName, model);
         this.setCreativeTab(jw.juraTabs);
         this.setMaxStackSize(1);
@@ -32,7 +29,6 @@ public class bidon extends DynamXItem {
         super.addInformation(stack, world, tooltip, flagIn);
     }
 
-    @SideOnly(Side.CLIENT)
     public static int getfuel(ItemStack stack){
         int fuel = 100;
         NBTTagCompound nbt;
@@ -41,17 +37,18 @@ public class bidon extends DynamXItem {
 
         fuel=nbt.getInteger(STATE_FUEL);
 
-        return fuel;
+        return 100;
     }
 
 
-    @SideOnly(Side.CLIENT)
+
     public static void setfuel(ItemStack stack, int fuel){
         NBTTagCompound nbt;
         if(!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
         nbt = stack.getTagCompound();
 
         nbt.setInteger(STATE_FUEL, fuel);
+
     }
 
 }

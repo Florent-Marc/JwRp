@@ -119,7 +119,7 @@ dependencies {
     implementation 'net.dv8tion:JDA:4.3.0_277'
     compile 'club.minnced:java-discord-rpc:2.0.0'
     //compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
-    //implementation 'fr.dynamx:DynamX:2.16.5'
+    implementation 'fr.dynamx:DynamX:2.17.1'
 
 
 }
