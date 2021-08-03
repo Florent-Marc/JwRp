@@ -1,24 +1,16 @@
 package com.mk.jw.Utils;
 
-import akka.actor.ActorCell;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.server.FMLServerHandler;
-import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
-import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
