@@ -18,20 +18,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import org.jline.utils.Log;
-
 import javax.annotation.Nullable;
 
 
-public class BlockGenerateur extends DynamXBlock  {
+public class BlockGenerateur extends DynamXBlock {
 
     public BlockGenerateur(Material material, String modid, String blockName, String model) {
         super(material, modid, blockName, model);
         this.setCreativeTab(jw.juraTabs);
         this.blockObjectInfo.setTranslation(new Vector3f(0.0F, -1.5F, 0.0F));
     }
-
-
-
 
     public int getHarvestLevel(IBlockState state) {
         return 2;
@@ -51,6 +47,7 @@ public class BlockGenerateur extends DynamXBlock  {
             if (hasCanister) {
                 TEGenerateur te = (TEGenerateur) worldIn.getTileEntity(pos);
                 if(ItemBidon.getfuel(Canister)>=10) {
+                    assert te != null;
                     if ((te.getFuel() + 10) <= te.getCapacitor()) {
                         te.addfuel(10);
                         ItemBidon.setfuel(Canister, ItemBidon.getfuel(Canister) - 10);
@@ -74,6 +71,8 @@ public class BlockGenerateur extends DynamXBlock  {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         ElectricityLink.addlist(pos);
+        TEGenerateur te = (TEGenerateur) worldIn.getTileEntity(pos);
+        te.setState(true);
     }
 
     @Override

@@ -15,6 +15,7 @@ public class TEGenerateur extends TileEntitySyncClient implements ITickable {
     private int kwh=0;
     private BlockObject b;
     private boolean upt = false;
+    private boolean state = true;
 
 
 
@@ -29,6 +30,16 @@ public class TEGenerateur extends TileEntitySyncClient implements ITickable {
 
     public void setKwh(int kwh) {
         this.kwh = kwh;
+        sync();
+        markDirty();
+    }
+
+    public boolean getState() {
+        return this.state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
         sync();
         markDirty();
     }
@@ -59,6 +70,8 @@ public class TEGenerateur extends TileEntitySyncClient implements ITickable {
 
     public void burn(boolean burned) {
         this.burned = burned;
+        sync();
+        markDirty();
     }
 
     public boolean isburned() {
@@ -76,6 +89,7 @@ public class TEGenerateur extends TileEntitySyncClient implements ITickable {
         super.readFromNBT(tagCompound);
         fuel = tagCompound.getInteger("fuel");
         timeleft = tagCompound.getInteger("timeleft");
+        state = tagCompound.getBoolean("tt");
     }
 
     @Override
@@ -83,6 +97,7 @@ public class TEGenerateur extends TileEntitySyncClient implements ITickable {
         super.writeToNBT(tagCompound);
         tagCompound.setInteger("fuel",fuel);
         tagCompound.setInteger("timeleft",timeleft);
+        tagCompound.setBoolean("tt",state);
         return tagCompound;
     }
 
@@ -104,17 +119,21 @@ public class TEGenerateur extends TileEntitySyncClient implements ITickable {
 
     @Override
     public void update() {
-        if(!hasFuel()){
-            burn(false);
-        }
-        if(hasFuel()) {
-            if (getTimeleft() == 0) {
-                removeFuel();
-                setTimeleft(getTimeburned());
-            } else {
-                setTimeleft(getTimeleft() - 1);
-                burn(true);
+        if(getState()==true) {
+            if (!hasFuel()) {
+                burn(false);
             }
+            if (hasFuel()) {
+                if (getTimeleft() == 0) {
+                    removeFuel();
+                    setTimeleft(getTimeburned());
+                } else {
+                    setTimeleft(getTimeleft() - 1);
+                    burn(true);
+                }
+            }
+        }else{
+            burn(false);
         }
         if(isburned()){
             setKwh(120);
